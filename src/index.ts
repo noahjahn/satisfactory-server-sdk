@@ -1,5 +1,6 @@
-import type { IHttpClient } from './http-client';
-import Client from './http-client';
+import type { IHttpClient } from './http-client.js';
+import Client from './http-client.js';
+import logger from './logger/index.js';
 
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
@@ -14,16 +15,25 @@ export type ErrorResult = {
   errrorData?: unknown;
 };
 
+type SatisfactoryServerOptions = {
+  insecure: boolean;
+};
+
 class SatisfactoryServer {
   protected baseUrl: string;
   client: IHttpClient;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, options: SatisfactoryServerOptions) {
     // TODO: check if baseUrl has `/api/v1` at the end or not, throw an error if it does
     // TODO: probably should trim any trailing slashes
     // TODO: validate the URL too maybe
     this.baseUrl = `${baseUrl}`;
-    this.client = new Client(this.baseUrl);
+    if (options.insecure) {
+      logger.warn(
+        "You've enabled insecure mode. The server will NOT reject unauthorized SSL certificates (like self-signed ones)",
+      );
+    }
+    this.client = new Client(this.baseUrl, options.insecure);
   }
 
   execute(apiFunction: ValidApiFunctions) {

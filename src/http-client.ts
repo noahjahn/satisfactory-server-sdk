@@ -1,9 +1,9 @@
-import { fetch } from 'bun';
-import https from 'https';
-import { Agent, setGlobalDispatcher } from 'undici';
+import fetch from 'node-fetch';
+import type { RequestInit } from 'node-fetch';
+import { Agent } from 'https';
 
-import type { ValidApiFunctions } from '.';
-import type { HealthCheckRequestBody } from './functions/health-check';
+import type { ValidApiFunctions } from './index.js';
+import type { HealthCheckRequestBody } from './functions/health-check/index.js';
 
 export type ValidRequestBody = {
   function: ValidApiFunctions;
@@ -29,26 +29,21 @@ export interface IHttpClient {
 export default class HttpClient implements IHttpClient {
   headers: RequestInit['headers'];
   baseUrl: string;
-  agent: https.Agent;
+  agent: Agent;
 
-  constructor(baseUrl: string, headers?: RequestInit['headers']) {
+  constructor(
+    baseUrl: string,
+    insecure: boolean = false,
+    headers?: RequestInit['headers'],
+  ) {
     this.baseUrl = baseUrl;
     this.headers = {
       'Content-Type': 'application/json',
       ...headers,
     };
-    this.agent = new https.Agent({
-      // TODO: default this to true, but require devs to turn it off if they want to ignore SSL issues due to self-signed cert
-      rejectUnauthorized: false,
+    this.agent = new Agent({
+      rejectUnauthorized: !insecure,
     });
-
-    const agent = new Agent({
-      connect: {
-        rejectUnauthorized: false,
-      },
-    });
-
-    setGlobalDispatcher(agent);
   }
 
   request({
@@ -69,6 +64,7 @@ export default class HttpClient implements IHttpClient {
         ...headers,
       },
       body: JSON.stringify(body),
+      agent: this.agent,
     });
   }
 }

@@ -2,13 +2,17 @@
   "name": "satisfactory-server-sdk",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test:integration": "node dist/tests/integration/index.js"
+  },
   "devDependencies": {
-    "@types/bun": "latest",
-    "bun-types": "^1.1.27",
     "undici": "^6.19.8"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.6.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
 }

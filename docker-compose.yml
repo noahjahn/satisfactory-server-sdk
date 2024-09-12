@@ -9,3 +9,14 @@ services:
       - ./:/home/bun/app
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+  node:
+    image: node:lts
+    user: $UID:$UID
+    command: node index.ts
+    ports:
+      - ${MAPPED_PORT:-4000}:4000
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
