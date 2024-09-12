@@ -3,13 +3,24 @@
 To install dependencies:
 
 ```bash
-bun install
+export UID
+docker compose run --rm bun install
 ```
 
-To run:
+To build:
+
+```
+docker compose run --rm node npm run build
+```
+
+To test:
 
 ```bash
-bun run index.ts
+docker compose run --rm node npm run test
 ```
 
-This project was created using `bun init` in bun v1.0.25. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+To build and test:
+
+```bash
+docker compose run --rm node npm run build-and-test
+```
