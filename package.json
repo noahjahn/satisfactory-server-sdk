@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test:integration": "node dist/tests/integration/index.js"
+    "test:integration": "node dist/tests/integration/index.js",
+    "test": "npm run test:integration",
+    "build-and-test": "npm run build && npm run test:integration"
   },
   "devDependencies": {
     "undici": "^6.19.8"
