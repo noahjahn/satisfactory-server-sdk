@@ -23,17 +23,17 @@ class SatisfactoryServer {
   protected baseUrl: string;
   client: IHttpClient;
 
-  constructor(baseUrl: string, options: SatisfactoryServerOptions) {
+  constructor(baseUrl: string, options?: SatisfactoryServerOptions) {
     // TODO: check if baseUrl has `/api/v1` at the end or not, throw an error if it does
     // TODO: probably should trim any trailing slashes
     // TODO: validate the URL too maybe
     this.baseUrl = `${baseUrl}`;
-    if (options.insecure) {
+    if (options?.insecure) {
       logger.warn(
         "You've enabled insecure mode. The server will NOT reject unauthorized SSL certificates (like self-signed ones)",
       );
     }
-    this.client = new Client(this.baseUrl, options.insecure);
+    this.client = new Client(this.baseUrl, options?.insecure);
   }
 
   execute(apiFunction: ValidApiFunctions) {
