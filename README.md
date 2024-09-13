@@ -4,7 +4,7 @@ To install dependencies:
 
 ```bash
 export UID
-docker compose run --rm bun install
+docker compose run --rm bun i
 ```
 
 To build:
