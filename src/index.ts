@@ -2,6 +2,7 @@ import type { IHttpClient } from './http-client.js';
 import Client from './http-client.js';
 import logger from './logger/index.js';
 import type { HealthCheckRequestData } from './functions/health-check/index.js';
+import { validateUrl } from './helpers/validate-url.js';
 
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
@@ -27,10 +28,9 @@ class SatisfactoryServer {
   client: IHttpClient;
 
   constructor(baseUrl: string, options?: SatisfactoryServerOptions) {
-    // TODO: check if baseUrl has `/api/v1` at the end or not, throw an error if it does
-    // TODO: probably should trim any trailing slashes
-    // TODO: validate the URL too maybe
-    this.baseUrl = `${baseUrl}`;
+    const validUrl = validateUrl(baseUrl) as string;
+
+    this.baseUrl = validUrl;
     if (options?.insecure) {
       logger.warn(
         "You've enabled insecure mode. The server will NOT reject unauthorized SSL certificates (like self-signed ones)",
