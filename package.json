@@ -9,7 +9,6 @@
     "build-and-test": "npm run build && npm run test:integration"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.9",
     "undici": "^6.19.8"
   },
   "peerDependencies": {
