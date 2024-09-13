@@ -3,11 +3,11 @@ import type { RequestInit } from 'node-fetch';
 import { Agent } from 'https';
 
 import type { ValidApiFunctions } from './index.js';
-import type { HealthCheckRequestBody } from './functions/health-check/index.js';
+import type { HealthCheckRequestData } from './functions/health-check/index.js';
 
 export type ValidRequestBody = {
   function: ValidApiFunctions;
-  data: HealthCheckRequestBody;
+  data: HealthCheckRequestData;
 };
 
 export interface IHttpClient {

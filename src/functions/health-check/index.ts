@@ -1,4 +1,4 @@
-export type HealthCheckRequestBody = {
+export type HealthCheckRequestData = {
   clientCustomData: string;
 };
 
