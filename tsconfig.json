@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "lib": ["esnext"],
-    "target": "es2017",
-    "module": "esnext",
+    "target": "esnext",
+    "module": "nodenext",
     "moduleDetection": "force",
     "allowJs": true,
     "types": [""],
+    "outDir": "dist",
 
     /* Bundler mode */
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "verbatimModuleSyntax": true,
 
     /* Linting */
@@ -16,8 +17,12 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-
-    "outDir": "dist",
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"]
 }
