@@ -5,6 +5,7 @@ import type {
 } from './http-client.js';
 import Client from './http-client.js';
 import logger from './logger/index.js';
+<<<<<<< HEAD
 import type {
   HealthCheck,
   HealthCheckRequestData,
@@ -18,6 +19,10 @@ import type {
 import type { QueryServerState } from './functions/query-server-state/index.js';
 import { validateUrl } from './helpers/validate-url.js';
 import type { QueryServerStateResponseBody } from './functions/query-server-state/index.js';
+=======
+import type { HealthCheckRequestData } from './functions/health-check/index.js';
+import { validateUrl } from './helpers/validate-url.js';
+>>>>>>> 462ba89 (added url validation)
 
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
