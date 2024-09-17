@@ -17,6 +17,7 @@
   "devDependencies": {
     "@types/chai": "^4.3.19",
     "@types/node": "^22.5.4",
-    "chai": "^5.1.1"
+    "chai": "^5.1.1",
+    "dotenv": "^16.4.5"
   }
 }
