@@ -14,6 +14,18 @@ export UID
 docker compose run --rm node npm run build
 ```
 
+---
+
+## Testing
+
+Before testing, be sure to Copy `.env.example` to `.env` and set the variables to your test environment
+
+TODO: run satisfactory server in a container and wait for the server to be available
+
+```
+cp .env.example .env
+```
+
 To test:
 
 ```bash
