@@ -7,9 +7,13 @@ import { validateUrl } from './helpers/validate-url.js';
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
   QueryServerState = 'queryserverstate',
+  PasswordLogin = 'passwordlogin',
 }
 
-export type ValidApiFunctions = 'healthcheck' | 'queryserverstate';
+export type ValidApiFunctions =
+  | 'healthcheck'
+  | 'queryserverstate'
+  | 'passwordlogin';
 
 export type ValidRequestData = HealthCheckRequestData;
 
@@ -39,22 +43,24 @@ class SatisfactoryServer {
     this.client = new Client(this.baseUrl, options?.insecure);
   }
 
-  getDefaultData(apiFunction: ValidApiFunctions) {
+  getDefaultData<T>(apiFunction: ValidApiFunctions) {
     if (apiFunction === ApiFunctions.HealthCheck)
       return {
         clientCustomData: '',
-      } as HealthCheckRequestData;
+      } as T;
 
-    // TODO: maybe this should be a not implemented error, since apiFunction could be valid but doesn't have any default data
-    throw new Error(`Unknown API Function: ${apiFunction}`);
+    return null;
   }
 
-  execute(apiFunction: ValidApiFunctions, data?: ValidRequestData) {
+  execute<RequestT, ResponseT>(
+    apiFunction: ValidApiFunctions,
+    data?: RequestT | null,
+  ) {
     if (data === undefined) {
-      data = this.getDefaultData(apiFunction);
+      data = this.getDefaultData<RequestT>(apiFunction);
     }
 
-    return this.client.request({
+    return this.client.request<RequestT, ResponseT>({
       method: 'post',
       path: '/api/v1',
       body: {
