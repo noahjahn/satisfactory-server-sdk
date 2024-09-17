@@ -1,19 +1,50 @@
 import fetch from 'node-fetch';
+import type { Response } from 'node-fetch';
 import type { RequestInit } from 'node-fetch';
 import { Agent } from 'https';
-
 import type { ValidApiFunctions } from './index.js';
-import type { HealthCheckRequestData } from './functions/health-check/index.js';
 
-export type ValidRequestBody = {
+export type ValidRequestBody<T> = {
   function: ValidApiFunctions;
-  data: HealthCheckRequestData;
+  data: T | null;
 };
+
+export type ResponseBody<T> = {
+  data: T;
+};
+
+export type ResponseError<T> = {
+  errorCode: string;
+  errorMessage?: string;
+  errorData?: T | undefined;
+};
+
+export interface IHttpError extends Error {
+  response: Response;
+  body: ResponseError<unknown>;
+}
+
+export class HttpError<T> extends Error implements IHttpError {
+  response: Response;
+  body: ResponseError<T>;
+  constructor({
+    response,
+    body,
+  }: {
+    response: Response;
+    body: ResponseError<T>;
+  }) {
+    super(body.errorMessage ? body.errorMessage : body.errorCode);
+    this.response = response;
+    this.body = body;
+    this.name = body.errorCode;
+  }
+}
 
 export interface IHttpClient {
   headers: RequestInit['headers'];
   baseUrl: string;
-  request: ({
+  request: <RequestT, ResponseT>({
     method,
     headers,
     path,
@@ -22,8 +53,8 @@ export interface IHttpClient {
     method: 'post';
     headers?: RequestInit['headers'];
     path: string;
-    body: ValidRequestBody;
-  }) => unknown;
+    body: ValidRequestBody<RequestT>;
+  }) => Promise<ResponseBody<ResponseT>>;
 }
 
 export default class HttpClient implements IHttpClient {
@@ -46,7 +77,7 @@ export default class HttpClient implements IHttpClient {
     });
   }
 
-  request({
+  async request<RequestT, ResponseT>({
     method,
     headers,
     path,
@@ -55,9 +86,9 @@ export default class HttpClient implements IHttpClient {
     method: 'post';
     headers?: RequestInit['headers'];
     path: string;
-    body: ValidRequestBody;
-  }) {
-    return fetch(new URL(path, this.baseUrl).toString(), {
+    body: ValidRequestBody<RequestT>;
+  }): Promise<ResponseBody<ResponseT>> {
+    const response = await fetch(new URL(path, this.baseUrl).toString(), {
       method,
       headers: {
         ...this.headers,
@@ -66,5 +97,23 @@ export default class HttpClient implements IHttpClient {
       body: JSON.stringify(body),
       agent: this.agent,
     });
+
+    const responseBody = await response.json();
+
+    if (!(response.status >= 200 && response.status < 400)) {
+      throw new HttpError<ResponseT>({
+        response,
+        body: responseBody as ResponseError<ResponseT>,
+      });
+    }
+
+    if ('errorCode' in (responseBody as ResponseError<unknown>)) {
+      throw new HttpError({
+        response,
+        body: responseBody as ResponseError<unknown>,
+      });
+    }
+
+    return responseBody as Promise<ResponseBody<ResponseT>>;
   }
 }
