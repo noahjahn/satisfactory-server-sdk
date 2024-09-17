@@ -1,5 +1,9 @@
 import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
+import type {
+  HealthCheckRequestData,
+  HealthCheckResponseBody,
+} from '../../src/functions/health-check/index.js';
 
 // TODO: accept integration URLs as args to the script
 
@@ -10,16 +14,22 @@ const satisfactoryInsecure = new SatisfactoryServer(
   },
 );
 
-const insecureResult = await satisfactoryInsecure.execute('healthcheck');
+const insecureResult = await satisfactoryInsecure.execute<
+  HealthCheckRequestData,
+  HealthCheckResponseBody
+>('healthcheck');
 
-logger.debug(await (insecureResult as Response).json());
+logger.debug(insecureResult.data);
 
 const satisfactorySecure = new SatisfactoryServer(
   'https://satisfactory.nobey.net',
 );
 
-const secureResult = await satisfactorySecure.execute('healthcheck');
+const secureResult = await satisfactorySecure.execute<
+  HealthCheckRequestData,
+  HealthCheckResponseBody
+>('healthcheck');
 
 logger.log('----\n');
 
-logger.debug(await (secureResult as Response).json());
+logger.debug(secureResult.data);
