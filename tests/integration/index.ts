@@ -1,35 +1,17 @@
-import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
-import type {
-  HealthCheckRequestData,
-  HealthCheckResponseBody,
-} from '../../src/functions/health-check/index.js';
+import executeHealthCheckTests from './healthcheck.js';
 
-// TODO: accept integration URLs as args to the script
+// TODO: should probably use mocha instead
+function assertAndLog(assertion: Function) {
+  try {
+    assertion();
+    logger.success('Assertion passed');
+  } catch (error) {
+    logger.error('Assertion failed');
+    console.error(error);
+  }
+}
 
-const satisfactoryInsecure = new SatisfactoryServer(
-  'https://satisfactory.nobey.net:7777',
-  {
-    insecure: true,
-  },
-);
+export { assertAndLog };
 
-const insecureResult = await satisfactoryInsecure.execute<
-  HealthCheckRequestData,
-  HealthCheckResponseBody
->('healthcheck');
-
-logger.debug(insecureResult.data);
-
-const satisfactorySecure = new SatisfactoryServer(
-  'https://satisfactory.nobey.net',
-);
-
-const secureResult = await satisfactorySecure.execute<
-  HealthCheckRequestData,
-  HealthCheckResponseBody
->('healthcheck');
-
-logger.log('----\n');
-
-logger.debug(secureResult.data);
+await executeHealthCheckTests();
