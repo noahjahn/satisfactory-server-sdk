@@ -132,8 +132,6 @@ async function test(satisfactoryServer: SatisfactoryServer) {
 }
 
 async function execute() {
-  // TODO: accept integration URLs as args to the script
-
   logger.log('Testing Password login...');
   const satisfactorySecure = new SatisfactoryServer(
     `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
