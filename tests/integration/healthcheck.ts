@@ -2,12 +2,16 @@ import { expect } from 'chai';
 import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
 import { assertAndLog } from './index.js';
-import type { HealthCheckResponseBody } from '../../src/functions/health-check/index.js';
-import type { ResponseBody } from '../../src/http-client.js';
+import {
+  type HealthCheckRequestData,
+  type HealthCheckResponseBody,
+} from '../../src/functions/health-check/index.js';
 
 async function test(satisfactoryServer: SatisfactoryServer) {
-  const healthcheck: ResponseBody<HealthCheckResponseBody> =
-    await satisfactoryServer.execute('healthcheck');
+  const healthcheck = await satisfactoryServer.execute<
+    HealthCheckRequestData,
+    HealthCheckResponseBody
+  >('healthcheck');
 
   assertAndLog(() => {
     expect(healthcheck).to.be.an('object');
