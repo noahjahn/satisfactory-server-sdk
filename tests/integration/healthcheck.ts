@@ -34,13 +34,11 @@ async function test(satisfactoryServer: SatisfactoryServer) {
 }
 
 async function execute() {
-  // TODO: accept integration URLs as args to the script
-
   logger.log('Testing Health Check...');
 
   logger.log('Testing insecure option...');
   const satisfactoryInsecure = new SatisfactoryServer(
-    'https://satisfactory.nobey.net:7777',
+    `https://${process.env.SATISFACTORY_SERVER_BASE_URL}:7777`,
     {
       insecure: true,
     },
@@ -49,7 +47,7 @@ async function execute() {
 
   logger.log('Testing secure connection...');
   const satisfactorySecure = new SatisfactoryServer(
-    'https://satisfactory.nobey.net',
+    `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
   );
 
   await test(satisfactorySecure);

@@ -7,9 +7,13 @@ import { validateUrl } from './helpers/validate-url.js';
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
   QueryServerState = 'queryserverstate',
+  PasswordLogin = 'passwordlogin',
 }
 
-export type ValidApiFunctions = 'healthcheck' | 'queryserverstate';
+export type ValidApiFunctions =
+  | 'healthcheck'
+  | 'queryserverstate'
+  | 'passwordlogin';
 
 export type ValidRequestData = HealthCheckRequestData;
 
