@@ -5,22 +5,16 @@ import type {
 } from './http-client.js';
 import Client from './http-client.js';
 import logger from './logger/index.js';
-import type { HealthCheckRequestData } from './functions/health-check/index.js';
+import type { HealthCheck } from './functions/health-check/index.js';
+import type { PasswordLogin } from './functions/password-login/index.js';
 import { validateUrl } from './helpers/validate-url.js';
 import type { PasswordLoginResponseBody } from './functions/password-login/index.js';
 
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
-  QueryServerState = 'queryserverstate',
+  // QueryServerState = 'queryserverstate',
   PasswordLogin = 'passwordlogin',
 }
-
-export type ValidApiFunctions =
-  | 'healthcheck'
-  | 'queryserverstate'
-  | 'passwordlogin';
-
-export type ValidRequestData = HealthCheckRequestData;
 
 export type ErrorResult = {
   errorCode: string;
@@ -30,6 +24,18 @@ export type ErrorResult = {
 
 type SatisfactoryServerOptions = {
   insecure: boolean;
+};
+
+type QueryServerState = {
+  functionName: 'queryserverstate';
+  requestType: unknown;
+  responseType: unknown;
+};
+
+export type ValidRequest = {
+  healthcheck: HealthCheck;
+  passwordlogin: PasswordLogin;
+  // queryserverstate: QueryServerState;
 };
 
 class SatisfactoryServer {
@@ -50,7 +56,7 @@ class SatisfactoryServer {
     this.client = new Client(this.baseUrl, options?.insecure);
   }
 
-  getDefaultData<T>(apiFunction: ValidApiFunctions) {
+  getDefaultData<T>(apiFunction: keyof ValidRequest) {
     if (apiFunction === ApiFunctions.HealthCheck)
       return {
         clientCustomData: '',
@@ -59,13 +65,34 @@ class SatisfactoryServer {
     return null;
   }
 
-  async execute<RequestT, ResponseT>(
-    apiFunction: ValidApiFunctions,
-    data?: RequestT | null,
+  typeCheck(
+    apiFunction: keyof ValidRequest,
+    data: ValidRequest[typeof apiFunction]['requestType'] | null,
   ) {
-    if (data === undefined) {
-      data = this.getDefaultData<RequestT>(apiFunction);
+    return {
+      apiFunction:
+        apiFunction as ValidRequest[typeof apiFunction]['functionName'],
+      data: data as ValidRequest[typeof apiFunction]['requestType'],
+    };
+  }
+
+  async execute(
+    requestedApiFunction: keyof ValidRequest,
+    requestedData?:
+      | ValidRequest[typeof requestedApiFunction]['requestType']
+      | null,
+  ) {
+    if (requestedData === undefined) {
+      requestedData =
+        this.getDefaultData<
+          ValidRequest[typeof requestedApiFunction]['requestType']
+        >(requestedApiFunction);
     }
+
+    const { apiFunction, data } = this.typeCheck(
+      requestedApiFunction,
+      requestedData,
+    );
 
     const requestOptions = {
       method: 'post',
@@ -74,7 +101,7 @@ class SatisfactoryServer {
         function: apiFunction,
         data,
       },
-    } as RequestOptions<RequestT>;
+    } as RequestOptions<ValidRequest[typeof apiFunction]['requestType']>;
 
     if (this.bearerToken !== undefined) {
       requestOptions.headers = {
@@ -82,9 +109,10 @@ class SatisfactoryServer {
       };
     }
 
-    const responseBody = this.client.request<RequestT, ResponseT>(
-      requestOptions,
-    );
+    const responseBody = this.client.request<
+      ValidRequest[typeof apiFunction]['requestType'],
+      ValidRequest[typeof apiFunction]['responseType']
+    >(requestOptions);
 
     if (apiFunction === ApiFunctions.PasswordLogin) {
       this.bearerToken = (

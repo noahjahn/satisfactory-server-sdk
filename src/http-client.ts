@@ -2,10 +2,10 @@ import fetch from 'node-fetch';
 import type { Response } from 'node-fetch';
 import type { RequestInit } from 'node-fetch';
 import { Agent } from 'https';
-import type { ValidApiFunctions } from './index.js';
+import type { ValidRequest } from './index.js';
 
 export type ValidRequestBody<T> = {
-  function: ValidApiFunctions;
+  function: keyof ValidRequest;
   data: T | null;
 };
 

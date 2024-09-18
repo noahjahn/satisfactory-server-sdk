@@ -9,10 +9,7 @@ import {
 import assertBasicResponseStructure from './helpers/assert-basic-response-structure.js';
 
 async function test(satisfactoryServer: SatisfactoryServer) {
-  const healthcheck = await satisfactoryServer.execute<
-    HealthCheckRequestData,
-    HealthCheckResponseBody
-  >('healthcheck');
+  const healthcheck = await satisfactoryServer.execute('healthcheck');
 
   assertBasicResponseStructure(healthcheck);
   assertAndLog("The healthcheck's data object has the health property", () => {
