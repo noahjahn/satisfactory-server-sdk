@@ -41,6 +41,13 @@ export class HttpError<T> extends Error implements IHttpError {
   }
 }
 
+export type RequestOptions<T> = {
+  method: 'post';
+  headers?: RequestInit['headers'];
+  path: string;
+  body: ValidRequestBody<T>;
+};
+
 export interface IHttpClient {
   headers: RequestInit['headers'];
   baseUrl: string;
@@ -49,12 +56,7 @@ export interface IHttpClient {
     headers,
     path,
     body,
-  }: {
-    method: 'post';
-    headers?: RequestInit['headers'];
-    path: string;
-    body: ValidRequestBody<RequestT>;
-  }) => Promise<ResponseBody<ResponseT>>;
+  }: RequestOptions<RequestT>) => Promise<ResponseBody<ResponseT>>;
 }
 
 export default class HttpClient implements IHttpClient {
@@ -82,12 +84,7 @@ export default class HttpClient implements IHttpClient {
     headers,
     path,
     body,
-  }: {
-    method: 'post';
-    headers?: RequestInit['headers'];
-    path: string;
-    body: ValidRequestBody<RequestT>;
-  }): Promise<ResponseBody<ResponseT>> {
+  }: RequestOptions<RequestT>): Promise<ResponseBody<ResponseT>> {
     const response = await fetch(new URL(path, this.baseUrl).toString(), {
       method,
       headers: {
