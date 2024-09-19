@@ -1,13 +1,10 @@
 import { expect } from 'chai';
-import {
-  type PasswordLoginRequestData,
-  type PasswordLoginResponseBody,
-  type PasswordLoginResponseErrorData,
-} from '../../src/functions/password-login/index.js';
+import { type PasswordLoginResponseErrorData } from '../../src/functions/password-login/index.js';
 import { HttpError } from '../../src/http-client.js';
 import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
 import { assertAndLog } from './index.js';
+import loginAdministrator from './helpers/login-administrator.js';
 import assertBasicHttpError from './helpers/assert-basic-http-error.js';
 
 function assertInstanceOfPasswordLoginError(error: unknown) {
@@ -130,20 +127,8 @@ async function testWithOutSendingAnyData(
 async function testWithValidCredentials(
   satisfactoryServer: SatisfactoryServer,
 ) {
-  if (!process.env.SATISFACTORY_ADMINISTRATOR_PASSWORD) {
-    throw new Error(
-      'Please set the SATISFACTORY_ADMINISTRATOR_PASSWORD environment variable',
-    );
-  }
-  const passwordlogin = await satisfactoryServer.execute<
-    PasswordLoginRequestData,
-    PasswordLoginResponseBody
-  >('passwordlogin', {
-    minimumPrivilegeLevel: 'administrator',
-    password: process.env.SATISFACTORY_ADMINISTRATOR_PASSWORD,
-  });
-
-  logger.log(passwordlogin.data.authenticationToken);
+  await loginAdministrator(satisfactoryServer);
+  // TODO: assert
 }
 
 async function test(satisfactoryServer: SatisfactoryServer) {
