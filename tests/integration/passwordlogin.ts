@@ -1,14 +1,18 @@
 import { expect } from 'chai';
-import type {
-  PasswordLoginResponseErrorData,
-  PasswordLoginRequestData,
+import {
+  type PasswordLoginRequestData,
+  type PasswordLoginResponseBody,
+  type PasswordLoginResponseErrorData,
 } from '../../src/functions/password-login/index.js';
 import { HttpError } from '../../src/http-client.js';
+import type { ResponseBody } from '../../src/http-client.js';
 import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
 import { assertAndLog } from './index.js';
 import loginAdministrator from './helpers/login-administrator.js';
+import loginClient from './helpers/login-client.js';
 import assertBasicHttpError from './helpers/assert-basic-http-error.js';
+import assertBasicResponseStructure from './helpers/assert-basic-response-structure.js';
 
 function assertInstanceOfPasswordLoginError(error: unknown) {
   assertAndLog(
@@ -36,6 +40,24 @@ function assertBasicPasswordLoginError(
     "The error response object's body property's errorMessage property is a string",
     () => {
       expect(passwordLoginError.body.errorMessage).to.be.a('string');
+    },
+  );
+}
+
+function assertSuccessfulLogin(
+  passwordLogin: ResponseBody<PasswordLoginResponseBody>,
+) {
+  assertBasicResponseStructure(passwordLogin);
+  assertAndLog(
+    "The passwordlogin's data object has the authenticationToken property",
+    () => {
+      expect(passwordLogin.data).to.have.property('authenticationToken');
+    },
+  );
+  assertAndLog(
+    "The passwordlogin's data object's authenticationToken property is a string",
+    () => {
+      expect(passwordLogin.data.authenticationToken).to.be.a('string');
     },
   );
 }
@@ -138,82 +160,61 @@ async function testWithInvalidCredentials(
         password: 'invalid',
       },
     );
-    assertAndLog('tmp', () => {
-      throw new Error(
-        'password login without sending any data should have failed',
-      );
-    });
+    assertAndLog(
+      'Throws and error in the case a somehow the passwordlogin with invalid credentialsgets this far',
+      () => {
+        throw new Error(
+          'password login without sending any data should have failed',
+        );
+      },
+    );
   } catch (error) {
-    assertAndLog('tmp', () => {
-      expect(error).to.be.an.instanceof(
-        HttpError<PasswordLoginResponseErrorData>,
-      );
-    });
+    assertInstanceOfPasswordLoginError(error);
     if (error instanceof HttpError) {
       const passwordLoginError =
         error as HttpError<PasswordLoginResponseErrorData>;
 
-      assertBasicHttpError(passwordLoginError);
+      assertBasicPasswordLoginError(passwordLoginError);
 
-      assertAndLog('tmp', () => {
-        expect(passwordLoginError.body.errorCode).to.equal('wrong_password');
-      });
+      assertAndLog(
+        "The error response object's body property's errorCode property equals wrong_password",
+        () => {
+          // TODO: can we make the error code here typed to the function?
+          expect(passwordLoginError.body.errorCode).to.equal('wrong_password');
+        },
+      );
 
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body).to.have.property('errorMessage');
-      // });
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorMessage).to.be.a('string');
-      // });
-
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body).to.have.property('errorData');
-      // });
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorData).to.be.an('object');
-      // });
-
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorData).to.have.property(
-      //     'missingParameters',
-      //   );
-      // });
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorData?.missingParameters).to.be.an(
-      //     'array',
-      //   );
-      // });
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorData?.missingParameters)
-      //     .to.include('password')
-      //     .and.include('minimumPrivilegeLevel');
-      // });
-
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorData).to.have.property(
-      //     'invalidParameters',
-      //   );
-      // });
-      // assertAndLog(() => {
-      //   expect(passwordLoginError.body.errorData?.invalidParameters).to.be.an(
-      //     'object',
-      //   );
-      // });
+      assertAndLog(
+        "The error response object's body property does NOT have the errorData property",
+        () => {
+          expect(passwordLoginError.body).to.not.have.a.property('errorData');
+        },
+      );
     }
   }
 }
 
-async function testWithValidCredentials(
+async function testWithValidAdministratorCredentials(
   satisfactoryServer: SatisfactoryServer,
 ) {
-  await loginAdministrator(satisfactoryServer);
-  // TODO: assert
+  const passwordloginAdministrator = await loginAdministrator(
+    satisfactoryServer,
+  );
+  assertSuccessfulLogin(passwordloginAdministrator);
+}
+
+async function testWithValidClientCredentials(
+  satisfactoryServer: SatisfactoryServer,
+) {
+  const passwordloginClient = await loginClient(satisfactoryServer);
+  assertSuccessfulLogin(passwordloginClient);
 }
 
 async function test(satisfactoryServer: SatisfactoryServer) {
   await testWithOutSendingAnyData(satisfactoryServer);
   await testWithInvalidCredentials(satisfactoryServer);
-  await testWithValidCredentials(satisfactoryServer);
+  await testWithValidAdministratorCredentials(satisfactoryServer);
+  await testWithValidClientCredentials(satisfactoryServer);
 }
 
 async function execute() {
