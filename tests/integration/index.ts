@@ -4,7 +4,8 @@ import executeHealthCheckTests from './healthcheck.js';
 import executePasswordLoginTests from './passwordlogin.js';
 
 // TODO: should probably use mocha instead
-function assertAndLog(assertion: Function) {
+function assertAndLog(message: string, assertion: Function) {
+  logger.log(message);
   try {
     assertion();
     logger.success('Assertion passed');
