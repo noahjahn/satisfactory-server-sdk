@@ -54,7 +54,7 @@ docker compose run --rm node npm run build-and-test
   - [ ] VerifyAuthenticationToken
   - [ ] PasswordlessLogin
   - [x] PasswordLogin
-  - [x] QueryServerState
+  - [ ] QueryServerState
   - [ ] GetServerOptions
   - [ ] GetAdvancedGameSettings
   - [ ] ApplyAdvancedGameSettings
