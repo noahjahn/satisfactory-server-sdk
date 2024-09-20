@@ -1,8 +1,13 @@
-import type { IHttpClient } from './http-client.js';
+import type {
+  IHttpClient,
+  ResponseBody,
+  RequestOptions,
+} from './http-client.js';
 import Client from './http-client.js';
 import logger from './logger/index.js';
 import type { HealthCheckRequestData } from './functions/health-check/index.js';
 import { validateUrl } from './helpers/validate-url.js';
+import type { PasswordLoginResponseBody } from './functions/password-login/index.js';
 
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
@@ -31,6 +36,8 @@ class SatisfactoryServer {
   protected baseUrl: string;
   client: IHttpClient;
 
+  protected bearerToken: string | undefined;
+
   constructor(baseUrl: string, options?: SatisfactoryServerOptions) {
     const validUrl = validateUrl(baseUrl) as string;
 
@@ -52,7 +59,7 @@ class SatisfactoryServer {
     return null;
   }
 
-  execute<RequestT, ResponseT>(
+  async execute<RequestT, ResponseT>(
     apiFunction: ValidApiFunctions,
     data?: RequestT | null,
   ) {
@@ -60,14 +67,32 @@ class SatisfactoryServer {
       data = this.getDefaultData<RequestT>(apiFunction);
     }
 
-    return this.client.request<RequestT, ResponseT>({
+    const requestOptions = {
       method: 'post',
       path: '/api/v1',
       body: {
         function: apiFunction,
         data,
       },
-    });
+    } as RequestOptions<RequestT>;
+
+    if (this.bearerToken !== undefined) {
+      requestOptions.headers = {
+        Authorization: `Bearer ${this.bearerToken}`,
+      };
+    }
+
+    const responseBody = this.client.request<RequestT, ResponseT>(
+      requestOptions,
+    );
+
+    if (apiFunction === ApiFunctions.PasswordLogin) {
+      this.bearerToken = (
+        (await responseBody) as ResponseBody<PasswordLoginResponseBody>
+      ).data.authenticationToken;
+    }
+
+    return responseBody;
   }
 }
 
