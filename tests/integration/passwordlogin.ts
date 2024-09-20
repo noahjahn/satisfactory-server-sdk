@@ -1,5 +1,8 @@
 import { expect } from 'chai';
-import { type PasswordLoginResponseErrorData } from '../../src/functions/password-login/index.js';
+import type {
+  PasswordLoginResponseErrorData,
+  PasswordLoginRequestData,
+} from '../../src/functions/password-login/index.js';
 import { HttpError } from '../../src/http-client.js';
 import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
@@ -124,6 +127,82 @@ async function testWithOutSendingAnyData(
   }
 }
 
+async function testWithInvalidCredentials(
+  satisfactoryServer: SatisfactoryServer,
+) {
+  try {
+    await satisfactoryServer.execute<PasswordLoginRequestData, unknown>(
+      'passwordlogin',
+      {
+        minimumPrivilegeLevel: 'administrator',
+        password: 'invalid',
+      },
+    );
+    assertAndLog('tmp', () => {
+      throw new Error(
+        'password login without sending any data should have failed',
+      );
+    });
+  } catch (error) {
+    assertAndLog('tmp', () => {
+      expect(error).to.be.an.instanceof(
+        HttpError<PasswordLoginResponseErrorData>,
+      );
+    });
+    if (error instanceof HttpError) {
+      const passwordLoginError =
+        error as HttpError<PasswordLoginResponseErrorData>;
+
+      assertBasicHttpError(passwordLoginError);
+
+      assertAndLog('tmp', () => {
+        expect(passwordLoginError.body.errorCode).to.equal('wrong_password');
+      });
+
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body).to.have.property('errorMessage');
+      // });
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorMessage).to.be.a('string');
+      // });
+
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body).to.have.property('errorData');
+      // });
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorData).to.be.an('object');
+      // });
+
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorData).to.have.property(
+      //     'missingParameters',
+      //   );
+      // });
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorData?.missingParameters).to.be.an(
+      //     'array',
+      //   );
+      // });
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorData?.missingParameters)
+      //     .to.include('password')
+      //     .and.include('minimumPrivilegeLevel');
+      // });
+
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorData).to.have.property(
+      //     'invalidParameters',
+      //   );
+      // });
+      // assertAndLog(() => {
+      //   expect(passwordLoginError.body.errorData?.invalidParameters).to.be.an(
+      //     'object',
+      //   );
+      // });
+    }
+  }
+}
+
 async function testWithValidCredentials(
   satisfactoryServer: SatisfactoryServer,
 ) {
@@ -133,6 +212,7 @@ async function testWithValidCredentials(
 
 async function test(satisfactoryServer: SatisfactoryServer) {
   await testWithOutSendingAnyData(satisfactoryServer);
+  await testWithInvalidCredentials(satisfactoryServer);
   await testWithValidCredentials(satisfactoryServer);
 }
 

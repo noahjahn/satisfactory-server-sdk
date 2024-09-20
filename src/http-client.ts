@@ -14,7 +14,7 @@ export type ResponseBody<T> = {
 };
 
 export type ResponseError<T> = {
-  errorCode: string;
+  errorCode: string; // TODO: can we make this a dynamic value based on T? For example
   errorMessage?: string;
   errorData?: T | undefined;
 };
