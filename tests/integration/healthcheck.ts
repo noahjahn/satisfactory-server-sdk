@@ -6,6 +6,7 @@ import {
   type HealthCheckRequestData,
   type HealthCheckResponseBody,
 } from '../../src/functions/health-check/index.js';
+import assertBasicResponseStructure from './helpers/assert-basic-response-structure.js';
 
 async function test(satisfactoryServer: SatisfactoryServer) {
   const healthcheck = await satisfactoryServer.execute<
@@ -13,24 +14,22 @@ async function test(satisfactoryServer: SatisfactoryServer) {
     HealthCheckResponseBody
   >('healthcheck');
 
-  assertAndLog(() => {
-    expect(healthcheck).to.be.an('object');
-  });
-  assertAndLog(() => {
-    expect(healthcheck).to.have.property('data');
-  });
-  assertAndLog(() => {
-    expect(healthcheck.data).to.be.an('object');
-  });
-  assertAndLog(() => {
+  assertBasicResponseStructure(healthcheck);
+  assertAndLog("The healthcheck's data object has the health property", () => {
     expect(healthcheck.data).to.have.property('health');
   });
-  assertAndLog(() => {
-    expect(healthcheck.data.health).to.be.a('string');
-  });
-  assertAndLog(() => {
-    expect(healthcheck.data.health).to.equal('healthy');
-  });
+  assertAndLog(
+    "The healthcheck's data object's health property is a string",
+    () => {
+      expect(healthcheck.data.health).to.be.a('string');
+    },
+  );
+  assertAndLog(
+    "The healthcheck's data object's health property is equal to healthy",
+    () => {
+      expect(healthcheck.data.health).to.equal('healthy');
+    },
+  );
 }
 
 async function execute() {
@@ -52,6 +51,9 @@ async function execute() {
 
   await test(satisfactorySecure);
   logger.log('Health Check testing complete.');
+
+  // TODO: how to test for slow?
+  // TODO: how to test for not healthy?
 }
 
 export default execute;
