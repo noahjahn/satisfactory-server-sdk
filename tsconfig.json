@@ -8,7 +8,7 @@
     "rootDir": "./src",
     "outDir": "dist",
     "declaration": true,
-    "types": [],
+    "types": [""],
 
     /* Bundler mode */
     "moduleResolution": "nodenext",
