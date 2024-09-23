@@ -5,10 +5,10 @@
     "module": "nodenext",
     "moduleDetection": "force",
     "allowJs": true,
+    "types": [""],
     "rootDir": "./src",
     "outDir": "dist",
     "declaration": true,
-    "types": [""],
 
     /* Bundler mode */
     "moduleResolution": "nodenext",
