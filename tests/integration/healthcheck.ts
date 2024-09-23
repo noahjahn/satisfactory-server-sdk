@@ -2,10 +2,6 @@ import { expect } from 'chai';
 import SatisfactoryServer from '../../src/index.js';
 import logger from '../../src/logger/index.js';
 import { assertAndLog } from './index.js';
-import {
-  type HealthCheckRequestData,
-  type HealthCheckResponseBody,
-} from '../../src/functions/health-check/index.js';
 import assertBasicResponseStructure from './helpers/assert-basic-response-structure.js';
 
 async function test(satisfactoryServer: SatisfactoryServer) {

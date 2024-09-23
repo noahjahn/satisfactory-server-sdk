@@ -31,10 +31,7 @@ function assertServerGameState({
 
 async function test(satisfactoryServer: SatisfactoryServer) {
   await loginAdministrator(satisfactoryServer);
-  const queryServerState = await satisfactoryServer.execute<
-    undefined,
-    QueryServerStateResponseBody
-  >('queryserverstate');
+  const queryServerState = await satisfactoryServer.execute('queryserverstate');
   assertBasicResponseStructure(queryServerState);
   assertAndLog(
     "The queryServerState's data object has the serverGameState property",
@@ -45,9 +42,7 @@ async function test(satisfactoryServer: SatisfactoryServer) {
   assertAndLog(
     "The queryServerState's data object's serverGameState property is an object",
     () => {
-      expect(queryServerState.data.serverGameState.activeSessionName).to.be.an(
-        'object',
-      );
+      expect(queryServerState.data.serverGameState).to.be.an('object');
     },
   );
   assertServerGameState({

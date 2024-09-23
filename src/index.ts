@@ -5,15 +5,24 @@ import type {
 } from './http-client.js';
 import Client from './http-client.js';
 import logger from './logger/index.js';
-import type { HealthCheck } from './functions/health-check/index.js';
-import type { PasswordLogin } from './functions/password-login/index.js';
+import type {
+  HealthCheck,
+  HealthCheckRequestData,
+  HealthCheckResponseBody,
+} from './functions/health-check/index.js';
+import type {
+  PasswordLogin,
+  PasswordLoginRequestData,
+  PasswordLoginResponseBody,
+} from './functions/password-login/index.js';
+import type { QueryServerState } from './functions/query-server-state/index.js';
 import { validateUrl } from './helpers/validate-url.js';
-import type { PasswordLoginResponseBody } from './functions/password-login/index.js';
+import type { QueryServerStateResponseBody } from './functions/query-server-state/index.js';
 
 export enum ApiFunctions {
   HealthCheck = 'healthcheck',
-  // QueryServerState = 'queryserverstate',
   PasswordLogin = 'passwordlogin',
+  QueryServerState = 'queryserverstate',
 }
 
 export type ErrorResult = {
@@ -26,16 +35,10 @@ type SatisfactoryServerOptions = {
   insecure: boolean;
 };
 
-type QueryServerState = {
-  functionName: 'queryserverstate';
-  requestType: unknown;
-  responseType: unknown;
-};
-
 export type ValidRequest = {
   healthcheck: HealthCheck;
   passwordlogin: PasswordLogin;
-  // queryserverstate: QueryServerState;
+  queryserverstate: QueryServerState;
 };
 
 class SatisfactoryServer {
@@ -65,41 +68,34 @@ class SatisfactoryServer {
     return null;
   }
 
-  typeCheck(
-    apiFunction: keyof ValidRequest,
-    data: ValidRequest[typeof apiFunction]['requestType'] | null,
-  ) {
-    return {
-      apiFunction:
-        apiFunction as ValidRequest[typeof apiFunction]['functionName'],
-      data: data as ValidRequest[typeof apiFunction]['requestType'],
-    };
-  }
-
   async execute(
-    requestedApiFunction: keyof ValidRequest,
-    requestedData?:
-      | ValidRequest[typeof requestedApiFunction]['requestType']
-      | null,
-  ) {
-    if (requestedData === undefined) {
-      requestedData =
-        this.getDefaultData<
-          ValidRequest[typeof requestedApiFunction]['requestType']
-        >(requestedApiFunction);
+    apiFunction: 'healthcheck',
+    data?: HealthCheckRequestData,
+  ): Promise<{ data: HealthCheckResponseBody }>;
+  async execute(
+    apiFunction: 'passwordlogin',
+    data?: PasswordLoginRequestData,
+  ): Promise<{ data: PasswordLoginResponseBody }>;
+  async execute(
+    apiFunction: 'queryserverstate',
+  ): Promise<{ data: QueryServerStateResponseBody }>;
+  async execute(
+    apiFunction: keyof ValidRequest,
+    data?: ValidRequest[typeof apiFunction]['requestType'] | null,
+  ): Promise<unknown> {
+    if (data === undefined) {
+      data =
+        this.getDefaultData<ValidRequest[typeof apiFunction]['requestType']>(
+          apiFunction,
+        );
     }
-
-    const { apiFunction, data } = this.typeCheck(
-      requestedApiFunction,
-      requestedData,
-    );
 
     const requestOptions = {
       method: 'post',
       path: '/api/v1',
       body: {
         function: apiFunction,
-        data,
+        data: data ?? null,
       },
     } as RequestOptions<ValidRequest[typeof apiFunction]['requestType']>;
 
