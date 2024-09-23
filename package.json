@@ -1,23 +1,45 @@
 {
-  "name": "satisfactory-server-sdk",
+  "name": "@noahjahn/satisfactory-server-sdk-test",
+  "version": "0.11.0",
+  "description": "Satisfactory Dedicated Server JS and TS HTTP API SDK",
   "module": "index.ts",
-  "dependencies": {
-    "node-fetch": "^3.3.2"
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/noahjahn/satisfactory-server-sdk.git"
+  },
+  "keywords": [
+    "Satisfactory",
+    "TypeScript",
+    "SDK"
+  ],
+  "author": "noahjahn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/noahjahn/satisfactory-server-sdk/issues"
+  },
+  "homepage": "https://github.com/noahjahn/satisfactory-server-sdk#readme",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test:integration": "tsx tests/integration/index.ts",
+    "test": "npm run test:integration",
+    "prepublish": "rm -rf dist && npm run build && cp package.json README.md dist/",
+    "publish": "npm publish --access public",
+    "postpublish": "rm dist/package.json dist/README.md"
   },
   "peerDependencies": {
     "typescript": "^5.6.2"
   },
-  "scripts": {
-    "build": "tsc",
-    "test:integration": "node dist/tests/integration/index.js",
-    "test": "npm run test:integration",
-    "build-and-test": "npm run build && npm run test:integration"
+  "dependencies": {
+    "@noahjahn/satisfactory-server-sdk-test": "^0.3.0",
+    "node-fetch": "^3.3.2"
   },
-  "type": "module",
   "devDependencies": {
     "@types/chai": "^4.3.19",
     "@types/node": "^22.5.4",
     "chai": "^5.1.1",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.1"
   }
 }
