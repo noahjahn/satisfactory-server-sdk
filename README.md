@@ -5,7 +5,7 @@ Satisfactory Dedicated Server JS and TS HTTP API SDK
 ## Installation
 
 ```
-npm i @noahjahn/satisfactory-server-sdk-test
+npm i @noahjahn/satisfactory-server-sdk
 ```
 
 ## Usage
@@ -13,17 +13,17 @@ npm i @noahjahn/satisfactory-server-sdk-test
 ### TypeScript
 
 ```typescript
-import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk-test';
-import {
-  type HealthCheckRequestData,
-  type HealthCheckResponseBody,
-} from '@noahjahn/satisfactory-server-sdk-test';
+import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
+import type {
+  HealthCheckRequestData,
+  HealthCheckResponseBody,
+} from '@noahjahn/satisfactory-server-sdk';
 
 const satisfactory = new SatisfactoryServer(
   `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
 );
 
-const healthcheck = await satisfactoryServer.execute<
+const healthcheck = await satisfactory.execute<
   HealthCheckRequestData,
   HealthCheckResponseBody
 >('healthcheck');
@@ -34,5 +34,13 @@ console.log(healthcheck.data.health);
 ### JavaScript
 
 ```javascript
+import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
 
+const satisfactory = new SatisfactoryServer(
+  `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
+);
+
+const healthcheck = await satisfactory.execute('healthcheck');
+
+console.log(healthcheck.data.health);
 ```

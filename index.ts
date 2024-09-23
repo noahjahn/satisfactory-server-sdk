@@ -1,14 +1,12 @@
 import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk-test';
-import {
-  type HealthCheckRequestData,
-  type HealthCheckResponseBody,
-} from '@noahjahn/satisfactory-server-sdk-test/dist/';
+import type {
+  HealthCheckRequestData,
+  HealthCheckResponseBody,
+} from '@noahjahn/satisfactory-server-sdk-test';
 
-const satisfactory = new SatisfactoryServer(
-  `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
-);
+const satisfactory = new SatisfactoryServer(`https://satisfactory.nobey.net`);
 
-const healthcheck = await satisfactoryServer.execute<
+const healthcheck = await satisfactory.execute<
   HealthCheckRequestData,
   HealthCheckResponseBody
 >('healthcheck');

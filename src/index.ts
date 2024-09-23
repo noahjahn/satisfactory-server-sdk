@@ -97,3 +97,8 @@ class SatisfactoryServer {
 }
 
 export default SatisfactoryServer;
+
+export * from './http-client.js';
+export * from './functions/index.js';
+export * from './helpers/index.js';
+export * from './logger/index.js';
