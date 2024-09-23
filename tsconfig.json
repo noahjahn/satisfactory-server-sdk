@@ -6,7 +6,9 @@
     "moduleDetection": "force",
     "allowJs": true,
     "types": [""],
+    "rootDir": "./src",
     "outDir": "dist",
+    "declaration": true,
 
     /* Bundler mode */
     "moduleResolution": "nodenext",
@@ -24,5 +26,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }
