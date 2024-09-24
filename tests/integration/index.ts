@@ -33,6 +33,8 @@ logger.log(`\n\nSummary:`);
 logger.success(`${testResults.success} successful tests`);
 if (testResults.failure === 0) {
   logger.success(`${testResults.failure} failed tests... 🚀 it!`);
-} else {
-  logger.failure(`Failed tests: ${testResults.failure}`);
+  process.exit(0);
 }
+
+logger.failure(`Failed tests: ${testResults.failure}`);
+process.exit(1);
