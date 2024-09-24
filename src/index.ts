@@ -25,12 +25,6 @@ export enum ApiFunctions {
   QueryServerState = 'queryserverstate',
 }
 
-export type ErrorResult = {
-  errorCode: string;
-  errorMessage?: string;
-  errrorData?: unknown;
-};
-
 type SatisfactoryServerOptions = {
   insecure: boolean;
 };
