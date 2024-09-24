@@ -1,41 +1,46 @@
 # satisfactory-server-sdk
 
-To install dependencies:
+Satisfactory Dedicated Server JS and TS HTTP API SDK
 
-```bash
-export UID
-docker compose run --rm bun i
-```
-
-To build:
-
-```bash
-export UID
-docker compose run --rm node npm run build
-```
-
----
-
-## Testing
-
-Before testing, be sure to Copy `.env.example` to `.env` and set the variables to your test environment
-
-TODO: run satisfactory server in a container and wait for the server to be available
+## Installation
 
 ```
-cp .env.example .env
+npm i @noahjahn/satisfactory-server-sdk
 ```
 
-To test:
+## Usage
 
-```bash
-export UID
-docker compose run --rm node npm run test
+### TypeScript
+
+```typescript
+import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
+import type {
+  HealthCheckRequestData,
+  HealthCheckResponseBody,
+} from '@noahjahn/satisfactory-server-sdk';
+
+const satisfactory = new SatisfactoryServer(
+  `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
+);
+
+const healthcheck = await satisfactory.execute<
+  HealthCheckRequestData,
+  HealthCheckResponseBody
+>('healthcheck');
+
+console.log(healthcheck.data.health);
 ```
 
-To build and test:
+### JavaScript
 
-```bash
-export UID
-docker compose run --rm node npm run build-and-test
+```javascript
+import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
+
+const satisfactory = new SatisfactoryServer(
+  `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
+);
+
+const healthcheck = await satisfactory.execute('healthcheck');
+
+console.log(healthcheck.data.health);
 ```

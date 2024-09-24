@@ -26,3 +26,13 @@ export type PasswordLoginResponseErrorData = {
   missingParameters: Array<string>;
   invalidParameters: {};
 };
+
+export enum PasswordLoginErrorCodes {
+  WRONG_PASSWORD = 'wrong_password',
+}
+
+export type PasswordLogin = {
+  functionName: 'passwordlogin';
+  requestType: PasswordLoginRequestData;
+  responseType: PasswordLoginResponseBody;
+};
