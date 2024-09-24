@@ -3,15 +3,13 @@
 To install dependencies:
 
 ```bash
-export UID
-docker compose run --rm bun i
+./bun i
 ```
 
 To build:
 
 ```bash
-export UID
-docker compose run --rm node npm run build
+./build
 ```
 
 ---
@@ -29,8 +27,7 @@ cp .env.example .env
 To test:
 
 ```bash
-export UID
-docker compose run --rm node npm run test
+./test
 ```
 
 ## More info
