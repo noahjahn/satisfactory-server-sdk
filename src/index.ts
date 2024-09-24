@@ -5,7 +5,6 @@ import type {
 } from './http-client.js';
 import Client from './http-client.js';
 import logger from './logger/index.js';
-<<<<<<< HEAD
 import type {
   HealthCheck,
   HealthCheckRequestData,
@@ -19,12 +18,14 @@ import type {
 import type { QueryServerState } from './functions/query-server-state/index.js';
 import { validateUrl } from './helpers/validate-url.js';
 import type { QueryServerStateResponseBody } from './functions/query-server-state/index.js';
-=======
-import type { HealthCheckRequestData } from './functions/health-check/index.js';
-import { validateUrl } from './helpers/validate-url.js';
->>>>>>> 462ba89 (added url validation)
+import type {
+  GetServerOptions,
+  GetServerOptionsRequestData,
+  GetServerOptionsResponseBody,
+} from './functions/index.js';
 
 export enum ApiFunctions {
+  GetServerOptions = 'getserveroptions',
   HealthCheck = 'healthcheck',
   PasswordLogin = 'passwordlogin',
   QueryServerState = 'queryserverstate',
@@ -35,6 +36,7 @@ export type SatisfactoryServerOptions = {
 };
 
 export type ValidRequest = {
+  getserveroptions: GetServerOptions;
   healthcheck: HealthCheck;
   passwordlogin: PasswordLogin;
   queryserverstate: QueryServerState;
@@ -67,6 +69,10 @@ class SatisfactoryServer {
     return null;
   }
 
+  async execute(
+    apiFunction: 'getserveroptions',
+    data?: GetServerOptionsRequestData,
+  ): Promise<{ data: GetServerOptionsResponseBody }>;
   async execute(
     apiFunction: 'healthcheck',
     data?: HealthCheckRequestData,

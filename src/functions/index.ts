@@ -1,3 +1,4 @@
-export * as healthcheck from './health-check/index.js';
-export * as passwordlogin from './password-login/index.js';
-export * as queryserverstate from './query-server-state/index.js';
+export * from './get-server-options/index.js';
+export * from './health-check/index.js';
+export * from './password-login/index.js';
+export * from './query-server-state/index.js';
