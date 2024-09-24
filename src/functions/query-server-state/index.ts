@@ -18,6 +18,6 @@ export type QueryServerStateResponseBody = {
 
 export type QueryServerState = {
   functionName: 'queryserverstate';
-  requestType: null;
+  requestType: undefined;
   responseType: QueryServerStateResponseBody;
 };

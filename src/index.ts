@@ -59,11 +59,11 @@ class SatisfactoryServer {
     this.client = new Client(this.baseUrl, options?.insecure);
   }
 
-  getDefaultData<T>(apiFunction: keyof ValidRequest) {
+  getDefaultData<Data>(apiFunction: keyof ValidRequest) {
     if (apiFunction === ApiFunctions.HealthCheck)
       return {
         clientCustomData: '',
-      } as T;
+      } as Data;
 
     return null;
   }
@@ -95,7 +95,7 @@ class SatisfactoryServer {
       path: '/api/v1',
       body: {
         function: apiFunction,
-        data: data ?? null,
+        data: data,
       },
     } as RequestOptions<ValidRequest[typeof apiFunction]['requestType']>;
 
