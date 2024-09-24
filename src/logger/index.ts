@@ -15,11 +15,17 @@ const logger = {
   log: (message: string | unknown) => {
     console.log(message);
   },
+  info: (message: string | unknown) => {
+    console.log(message);
+  },
   debug: (message: string | unknown) => {
     console.log(`DEBUG:`, message);
   },
   success: (message: string | unknown) => {
     console.log(`${Colors.Green}\u2713`, message, `${Colors.Reset}`);
+  },
+  failure: (message: string | unknown) => {
+    console.log(`${Colors.Red}\u2717`, message, `${Colors.Reset}`);
   },
 };
 
