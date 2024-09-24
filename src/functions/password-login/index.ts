@@ -30,3 +30,9 @@ export type PasswordLoginResponseErrorData = {
 export enum PasswordLoginErrorCodes {
   WRONG_PASSWORD = 'wrong_password',
 }
+
+export type PasswordLogin = {
+  functionName: 'passwordlogin';
+  requestType: PasswordLoginRequestData;
+  responseType: PasswordLoginResponseBody;
+};

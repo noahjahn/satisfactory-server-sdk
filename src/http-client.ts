@@ -2,21 +2,21 @@ import fetch from 'node-fetch';
 import type { Response } from 'node-fetch';
 import type { RequestInit } from 'node-fetch';
 import { Agent } from 'https';
-import type { ValidApiFunctions } from './index.js';
+import type { ValidRequest } from './index.js';
 
-export type ValidRequestBody<T> = {
-  function: ValidApiFunctions;
-  data: T | null;
+export type ValidRequestBody<Data> = {
+  function: keyof ValidRequest;
+  data?: Data;
 };
 
-export type ResponseBody<T> = {
-  data: T;
+export type ResponseBody<Data> = {
+  data: Data;
 };
 
-export type ResponseError<T> = {
+export type ResponseError<ErrorData> = {
   errorCode: string; // TODO: can we make this a dynamic value based on T? For example
   errorMessage?: string;
-  errorData?: T | undefined;
+  errorData?: ErrorData;
 };
 
 export interface IHttpError extends Error {
@@ -24,15 +24,15 @@ export interface IHttpError extends Error {
   body: ResponseError<unknown>;
 }
 
-export class HttpError<T> extends Error implements IHttpError {
+export class HttpError<ErrorData> extends Error implements IHttpError {
   response: Response;
-  body: ResponseError<T>;
+  body: ResponseError<ErrorData>;
   constructor({
     response,
     body,
   }: {
     response: Response;
-    body: ResponseError<T>;
+    body: ResponseError<ErrorData>;
   }) {
     super(body.errorMessage ? body.errorMessage : body.errorCode);
     this.response = response;
@@ -41,22 +41,22 @@ export class HttpError<T> extends Error implements IHttpError {
   }
 }
 
-export type RequestOptions<T> = {
+export type RequestOptions<Data> = {
   method: 'post';
   headers?: RequestInit['headers'];
   path: string;
-  body: ValidRequestBody<T>;
+  body: ValidRequestBody<Data>;
 };
 
 export interface IHttpClient {
   headers: RequestInit['headers'];
   baseUrl: string;
-  request: <RequestT, ResponseT>({
+  request: <RequestData, ResponseData>({
     method,
     headers,
     path,
     body,
-  }: RequestOptions<RequestT>) => Promise<ResponseBody<ResponseT>>;
+  }: RequestOptions<RequestData>) => Promise<ResponseBody<ResponseData>>;
 }
 
 export default class HttpClient implements IHttpClient {
@@ -79,12 +79,12 @@ export default class HttpClient implements IHttpClient {
     });
   }
 
-  async request<RequestT, ResponseT>({
+  async request<RequestData, ResponseData>({
     method,
     headers,
     path,
     body,
-  }: RequestOptions<RequestT>): Promise<ResponseBody<ResponseT>> {
+  }: RequestOptions<RequestData>): Promise<ResponseBody<ResponseData>> {
     const response = await fetch(new URL(path, this.baseUrl).toString(), {
       method,
       headers: {
@@ -98,9 +98,9 @@ export default class HttpClient implements IHttpClient {
     const responseBody = await response.json();
 
     if (!(response.status >= 200 && response.status < 400)) {
-      throw new HttpError<ResponseT>({
+      throw new HttpError<ResponseData>({
         response,
-        body: responseBody as ResponseError<ResponseT>,
+        body: responseBody as ResponseError<ResponseData>,
       });
     }
 
@@ -111,6 +111,6 @@ export default class HttpClient implements IHttpClient {
       });
     }
 
-    return responseBody as Promise<ResponseBody<ResponseT>>;
+    return responseBody as Promise<ResponseBody<ResponseData>>;
   }
 }

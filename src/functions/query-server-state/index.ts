@@ -15,3 +15,9 @@ export type ServerGameState = {
 export type QueryServerStateResponseBody = {
   serverGameState: ServerGameState;
 };
+
+export type QueryServerState = {
+  functionName: 'queryserverstate';
+  requestType: undefined;
+  responseType: QueryServerStateResponseBody;
+};

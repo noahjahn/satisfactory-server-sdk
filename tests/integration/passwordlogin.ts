@@ -153,13 +153,10 @@ async function testWithInvalidCredentials(
   satisfactoryServer: SatisfactoryServer,
 ) {
   try {
-    await satisfactoryServer.execute<PasswordLoginRequestData, unknown>(
-      'passwordlogin',
-      {
-        minimumPrivilegeLevel: 'administrator',
-        password: 'invalid',
-      },
-    );
+    await satisfactoryServer.execute('passwordlogin', {
+      minimumPrivilegeLevel: 'administrator',
+      password: 'invalid',
+    });
     assertAndLog(
       'Throws and error in the case a somehow the passwordlogin with invalid credentialsgets this far',
       () => {
