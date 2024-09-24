@@ -9,8 +9,8 @@ const testResults = {
   failure: 0,
 };
 
-// TODO: should probably use mocha instead
-function assertAndLog(message: string, assertion: Function) {
+// TODO: should probably use vitest or mocha instead
+function test(message: string, assertion: Function) {
   logger.log(message);
   try {
     assertion();
@@ -23,7 +23,7 @@ function assertAndLog(message: string, assertion: Function) {
   }
 }
 
-export { assertAndLog };
+export { test };
 
 await executeHealthCheckTests();
 await executePasswordLoginTests();
