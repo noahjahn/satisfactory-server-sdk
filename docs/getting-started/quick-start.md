@@ -48,13 +48,13 @@ We use the [dotenv](https://www.npmjs.com/package/dotenv) library to load our en
 
 ```TypeScript
 import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
+import { HttpError } from '@noahjahn/satisfactory-server-sdk';
 import {
   type PasswordLoginResponseErrorData,
   PrivilegeLevels,
-  HttpError,
-} from '@noahjahn/satisfactory-server-sdk'
+} from '@noahjahn/satisfactory-server-sdk/functions/password-login';
 
-const satisfactory = new SatisfactoryServer(
+const satisfactoryServer = new SatisfactoryServer(
   process.env.SATISFACTORY_SERVER_BASE_URL,
 );
 
@@ -68,27 +68,25 @@ try {
   console.log(queryServerState);
 } catch (error) {
   console.error(error);
-  if (error instanceof HttpError<PasswordLoginResponseErrorData>) {
-    const passwordLoginError =
-      error as HttpError<PasswordLoginResponseErrorData>;
-    // Handle specific error response from `passwordlogin` function
-  }
   if (error instanceof HttpError) {
-    const httpError = error as HttpError;
-    // Handle generic Satisfactory Server HTTP Error
+    const satisfactoryServerError = error as HttpError<
+      PasswordLoginResponseErrorData | undefined
+    >;
+    console.error(satisfactoryServerError.body.errorCode);
   }
 }
+
 ```
 
 ```JavaScript
 import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
+import { HttpError } from '@noahjahn/satisfactory-server-sdk';
 import {
   PrivilegeLevels,
-  HttpError,
-} from '@noahjahn/satisfactory-server-sdk'
+} from '@noahjahn/satisfactory-server-sdk/functions/password-login';
 
-const satisfactory = new SatisfactoryServer(
-  process.env.SATISFACTORY_SERVER_BASE_URL,
+const satisfactoryServer = new SatisfactoryServer(
+  process.env.SATISFACTORY_SERVER_URL,
 );
 
 try {
@@ -102,8 +100,8 @@ try {
 } catch (error) {
   console.error(error);
   if (error instanceof HttpError) {
-    const httpError = error as HttpError;
-    // Handle generic Satisfactory Server HTTP Error
+    const satisfactoryServerError = error as HttpError;
+    console.error(satisfactoryServerError.body.errorCode);
   }
 }
 ```
