@@ -37,6 +37,7 @@
     "test": "npm run test:integration",
     "prepublishOnly": "npm run build",
     "predocs:dev": "typedoc",
+    "predocs:build": "typedoc",
     "docs:dev": "vitepress dev docs --host",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
