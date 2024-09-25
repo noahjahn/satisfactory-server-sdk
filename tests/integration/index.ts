@@ -27,9 +27,9 @@ function test(message: string, assertion: Function) {
 export { test };
 
 await executeGetServerOptionsTests();
-// await executeHealthCheckTests();
-// await executePasswordLoginTests();
-// await executeQueryServerStateTests();
+await executeHealthCheckTests();
+await executePasswordLoginTests();
+await executeQueryServerStateTests();
 
 logger.log(`\n\nSummary:`);
 logger.success(`${testResults.success} successful tests`);
