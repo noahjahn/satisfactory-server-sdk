@@ -1,6 +1,6 @@
 # satisfactory-server-sdk
 
-Satisfactory Dedicated Server "TypeScript first" JavaScript HTTP API SDK docs
+Satisfactory Dedicated Server JS and TS HTTP API SDK
 
 ## Installation
 
@@ -14,24 +14,33 @@ npm i @noahjahn/satisfactory-server-sdk
 
 ```typescript
 import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
+import type {
+  HealthCheckRequestData,
+  HealthCheckResponseBody,
+} from '@noahjahn/satisfactory-server-sdk';
 
 const satisfactory = new SatisfactoryServer(
-  process.env.SATISFACTORY_SERVER_BASE_URL,
+  `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
 );
 
-const healthcheck = await satisfactory.execute('healthcheck');
+const healthcheck = await satisfactory.execute<
+  HealthCheckRequestData,
+  HealthCheckResponseBody
+>('healthcheck');
+
 console.log(healthcheck.data.health);
 ```
 
-### JavaScript ESM
+### JavaScript
 
 ```javascript
 import SatisfactoryServer from '@noahjahn/satisfactory-server-sdk';
 
 const satisfactory = new SatisfactoryServer(
-  process.env.SATISFACTORY_SERVER_BASE_URL,
+  `https://${process.env.SATISFACTORY_SERVER_BASE_URL}`,
 );
 
 const healthcheck = await satisfactory.execute('healthcheck');
+
 console.log(healthcheck.data.health);
 ```

@@ -175,3 +175,6 @@ dist
 .DS_Store
 
 *.js
+
+docs/.vitepress/dist
+docs/.vitepress/cache

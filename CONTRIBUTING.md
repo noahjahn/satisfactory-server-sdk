@@ -64,9 +64,11 @@ To test:
   - [ ] LoadGame
   - [ ] UploadSaveGame
   - [ ] DownloadSaveGame
-- [ ] Set up Docusaurus
+- [ ] Set up Vitepress
   - [ ] Add examples for every function
-  - [ ] Add install and configuration steps
+  - [x] Add install and configuration steps
+  - [x] Setup typedoc to auto generate markdown for API reference in Vitepress
+  - [ ] Setup and host on GitHub pages via Github action workflow
 - [ ] Publish to NPM from a GitHub action workflow
   - [ ] Publish a TS version
   - [ ] Publish a JS version
@@ -79,3 +81,4 @@ To test:
 - Automatically execute tests whenever a new dedicated server version is release
 - Notify test results to proactively be told when things need to change to support different versions
 - build a cli with the sdk
+- Add more typedoc documentation
