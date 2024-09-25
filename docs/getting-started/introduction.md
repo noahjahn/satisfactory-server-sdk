@@ -19,4 +19,4 @@ Our goal with the SDK is to focus on Developer Experience (DX) and make sure the
 
 ## How do I get started?
 
-Take a look at the [Quick Start](/quick-start), it will walk you through installation and using the SDK.
+Take a look at the [Quick Start](/getting-started/quick-start), it will walk you through installation and using the SDK.
