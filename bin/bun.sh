@@ -1,4 +1,4 @@
 #!/bin/bash
 
 export UID
-docker compose run --rm bun $@
+docker compose run --rm --service-ports bun $@

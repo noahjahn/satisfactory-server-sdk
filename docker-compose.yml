@@ -1,10 +1,10 @@
 services:
   bun:
-    image: oven/bun:latest
+    image: imbios/bun-node:latest
     user: $UID:$UID
     command: bun run dev
     ports:
-      - ${MAPPED_PORT:-4000}:4000
+      - ${DOCS_MAPPED_PORT:-5173}:5173
     volumes:
       - ./:/home/bun/app
     extra_hosts:
@@ -14,7 +14,7 @@ services:
     user: $UID:$UID
     command: node index.ts
     ports:
-      - ${MAPPED_PORT:-4000}:4000
+      - ${DOCS_MAPPED_PORT:-5173}:5173
     working_dir: /home/node/app
     volumes:
       - ./:/home/node/app
