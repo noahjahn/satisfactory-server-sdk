@@ -25,7 +25,7 @@ export enum ApiFunctions {
   QueryServerState = 'queryserverstate',
 }
 
-type SatisfactoryServerOptions = {
+export type SatisfactoryServerOptions = {
   insecure: boolean;
 };
 
@@ -118,6 +118,6 @@ export default SatisfactoryServer;
 
 export { SatisfactoryServer };
 export * from './http-client.js';
-export * from './functions/index.js';
-export * from './helpers/index.js';
-export * from './logger/index.js';
+export * as functions from './functions/index.js';
+export * as helpers from './helpers/index.js';
+export * as logger from './logger/index.js';
