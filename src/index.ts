@@ -25,7 +25,7 @@ export enum ApiFunctions {
   QueryServerState = 'queryserverstate',
 }
 
-type SatisfactoryServerOptions = {
+export type SatisfactoryServerOptions = {
   insecure: boolean;
 };
 
