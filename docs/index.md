@@ -8,8 +8,8 @@ hero:
   tagline: Satisfactory Dedicated Server "TypeScript first" JavaScript HTTP API SDK docs
   actions:
     - theme: brand
-      text: Usage Examples
-      link: /examples
+      text: Quick start
+      link: /getting-started/quick-start
     - theme: alt
       text: API Reference
       link: /api
