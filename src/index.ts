@@ -18,8 +18,14 @@ import type {
 import type { QueryServerState } from './functions/query-server-state/index.js';
 import { validateUrl } from './helpers/validate-url.js';
 import type { QueryServerStateResponseBody } from './functions/query-server-state/index.js';
+import type {
+  GetServerOptions,
+  GetServerOptionsRequestData,
+  GetServerOptionsResponseBody,
+} from './functions/get-server-options/index.js';
 
 export enum ApiFunctions {
+  GetServerOptions = 'getserveroptions',
   HealthCheck = 'healthcheck',
   PasswordLogin = 'passwordlogin',
   QueryServerState = 'queryserverstate',
@@ -30,6 +36,7 @@ export type SatisfactoryServerOptions = {
 };
 
 export type ValidRequest = {
+  getserveroptions: GetServerOptions;
   healthcheck: HealthCheck;
   passwordlogin: PasswordLogin;
   queryserverstate: QueryServerState;
@@ -62,6 +69,10 @@ class SatisfactoryServer {
     return null;
   }
 
+  async execute(
+    apiFunction: 'getserveroptions',
+    data?: GetServerOptionsRequestData,
+  ): Promise<{ data: GetServerOptionsResponseBody }>;
   async execute(
     apiFunction: 'healthcheck',
     data?: HealthCheckRequestData,
