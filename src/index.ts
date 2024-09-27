@@ -22,7 +22,7 @@ import type {
   GetServerOptions,
   GetServerOptionsRequestData,
   GetServerOptionsResponseBody,
-} from './functions/index.js';
+} from './functions/get-server-options/index.js';
 
 export enum ApiFunctions {
   GetServerOptions = 'getserveroptions',
