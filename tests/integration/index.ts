@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import logger from '../../src/logger/index.js';
+import executeGetAdvancedGameSettingsTests from './getadvancedgamesettings.js';
 import executeGetServerOptionsTests from './getserveroptions.js';
 import executeHealthCheckTests from './healthcheck.js';
 import executePasswordLoginTests from './passwordlogin.js';
@@ -26,6 +27,7 @@ function test(message: string, assertion: Function) {
 
 export { test };
 
+await executeGetAdvancedGameSettingsTests();
 await executeGetServerOptionsTests();
 await executeHealthCheckTests();
 await executePasswordLoginTests();
