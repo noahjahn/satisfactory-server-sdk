@@ -12,7 +12,7 @@ hero:
       link: /getting-started/quick-start
     - theme: alt
       text: API Reference
-      link: /api
+      link: /api/classes/SatisfactoryServer
 
 features:
   - title: TypeScript First
