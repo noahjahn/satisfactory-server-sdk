@@ -1,7 +1,3 @@
-import type {
-  PasswordLoginRequestData,
-  PasswordLoginResponseBody,
-} from '../../../src/functions/password-login/index.js';
 import type SatisfactoryServer from '../../../src/index.js';
 
 export default function loginAdministrator(
@@ -13,10 +9,7 @@ export default function loginAdministrator(
     );
   }
 
-  return satisfactoryServer.execute<
-    PasswordLoginRequestData,
-    PasswordLoginResponseBody
-  >('passwordlogin', {
+  return satisfactoryServer.execute('passwordlogin', {
     minimumPrivilegeLevel: 'administrator',
     password: process.env.SATISFACTORY_ADMINISTRATOR_PASSWORD,
   });

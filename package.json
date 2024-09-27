@@ -32,7 +32,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "pretest": "npm run build",
+    "test:tsc": "tsc --project tsconfig.test.json",
+    "pretest": "set -e && npm run test:tsc && npm run build",
     "test:integration": "tsx tests/integration/index.ts",
     "test": "npm run test:integration",
     "prepublishOnly": "npm run build",

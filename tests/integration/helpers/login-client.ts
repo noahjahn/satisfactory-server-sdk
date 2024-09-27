@@ -1,7 +1,3 @@
-import type {
-  PasswordLoginRequestData,
-  PasswordLoginResponseBody,
-} from '../../../src/functions/password-login/index.js';
 import type SatisfactoryServer from '../../../src/index.js';
 
 export default function loginClient(satisfactoryServer: SatisfactoryServer) {
@@ -11,10 +7,7 @@ export default function loginClient(satisfactoryServer: SatisfactoryServer) {
     );
   }
 
-  return satisfactoryServer.execute<
-    PasswordLoginRequestData,
-    PasswordLoginResponseBody
-  >('passwordlogin', {
+  return satisfactoryServer.execute('passwordlogin', {
     minimumPrivilegeLevel: 'client',
     password: process.env.SATISFACTORY_CLIENT_PASSWORD,
   });

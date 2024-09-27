@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import {
-  type PasswordLoginRequestData,
+  PrivilegeLevels,
   type PasswordLoginResponseBody,
   type PasswordLoginResponseErrorData,
 } from '../../src/functions/password-login/index.js';
@@ -112,7 +112,7 @@ async function testWithInvalidCredentials(
 ) {
   try {
     await satisfactoryServer.execute('passwordlogin', {
-      minimumPrivilegeLevel: 'administrator',
+      minimumPrivilegeLevel: PrivilegeLevels.Administrator,
       password: 'invalid',
     });
     test('Throws and error in the case a somehow the passwordlogin with invalid credentialsgets this far', () => {

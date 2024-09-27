@@ -1,6 +1,9 @@
 import { expect } from 'chai';
 import { test } from './index.js';
-import type { QueryServerStateResponseBody } from '../../src/functions/query-server-state/index.js';
+import type {
+  QueryServerStateResponseBody,
+  ServerGameState,
+} from '../../src/functions/query-server-state/index.js';
 import SatisfactoryServer, { type ResponseBody } from '../../src/index.js';
 import logger from '../../src/logger/index.js';
 import loginAdministrator from './helpers/login-administrator.js';
@@ -12,7 +15,7 @@ function assertServerGameState({
   type,
 }: {
   queryServerState: ResponseBody<QueryServerStateResponseBody>;
-  key: string;
+  key: keyof ServerGameState;
   type: string;
 }) {
   test(`The queryServerState's data object's serverGameState object has the ${key} property`, () => {
