@@ -15,7 +15,7 @@ export default defineConfig({
       {
         text: 'Getting started',
         items: [
-          { text: 'Introduction', link: '/getting-started//introduction' },
+          { text: 'Introduction', link: '/getting-started/introduction' },
           { text: 'Quick start', link: '/getting-started/quick-start' },
           { text: 'Resources', link: '/getting-started/resources' },
         ],
@@ -39,5 +39,8 @@ export default defineConfig({
         link: 'https://github.com/noahjahn/satisfactory-server-sdk',
       },
     ],
+    search: {
+      provider: 'local',
+    },
   },
 });

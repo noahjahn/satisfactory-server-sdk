@@ -1,6 +1,16 @@
 {
+  "name": "Satisfactory Server SDK",
+  "readme": "./docs/getting-started/quick-start.md",
   "entryPoints": ["src/index.ts"],
   "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
   "docsRoot": "./docs",
-  "out": "./docs/api"
+  "out": "./docs/api",
+  "categorizeByGroup": true,
+  "hideGenerator": true,
+  "cacheBust": true,
+  "navigation": {
+    "includeCategories": false,
+    "includeGroups": false,
+    "includeFolders": false
+  }
 }
