@@ -19,12 +19,18 @@ import type { QueryServerState } from './functions/query-server-state/index.js';
 import { validateUrl } from './helpers/validate-url.js';
 import type { QueryServerStateResponseBody } from './functions/query-server-state/index.js';
 import type {
+  GetAdvancedGameSettings,
+  GetAdvancedGameSettingsRequestData,
+  GetAdvancedGameSettingsResponseBody,
+} from './functions/get-advanced-game-settings/index.js';
+import type {
   GetServerOptions,
   GetServerOptionsRequestData,
   GetServerOptionsResponseBody,
 } from './functions/get-server-options/index.js';
 
 export enum ApiFunctions {
+  GetAdvancedGameSettings = 'getadvancedgamesettings',
   GetServerOptions = 'getserveroptions',
   HealthCheck = 'healthcheck',
   PasswordLogin = 'passwordlogin',
@@ -36,6 +42,7 @@ export type SatisfactoryServerOptions = {
 };
 
 export type ValidRequest = {
+  getadvancedgamesettings: GetAdvancedGameSettings;
   getserveroptions: GetServerOptions;
   healthcheck: HealthCheck;
   passwordlogin: PasswordLogin;
@@ -69,6 +76,10 @@ class SatisfactoryServer {
     return null;
   }
 
+  async execute(
+    apiFunction: 'getadvancedgamesettings',
+    data?: GetAdvancedGameSettingsRequestData,
+  ): Promise<{ data: GetAdvancedGameSettingsResponseBody }>;
   async execute(
     apiFunction: 'getserveroptions',
     data?: GetServerOptionsRequestData,
