@@ -5,7 +5,7 @@ import executeGetServerOptionsTests from './getserveroptions.js';
 import executeHealthCheckTests from './healthcheck.js';
 import executePasswordLoginTests from './passwordlogin.js';
 import executeQueryServerStateTests from './queryserverstate.js';
-
+import executeRunCommandTests from './runcommand.js';
 const testResults = {
   success: 0,
   failure: 0,
@@ -32,6 +32,7 @@ await executeGetServerOptionsTests();
 await executeHealthCheckTests();
 await executePasswordLoginTests();
 await executeQueryServerStateTests();
+await executeRunCommandTests();
 
 logger.log(`\n\nSummary:`);
 logger.success(`${testResults.success} successful tests`);
