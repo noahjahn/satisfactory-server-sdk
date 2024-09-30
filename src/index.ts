@@ -28,6 +28,10 @@ import type {
   GetServerOptionsRequestData,
   GetServerOptionsResponseBody,
 } from './functions/get-server-options/index.js';
+import type {
+  RunCommand,
+  RunCommandRequestResponseBody,
+} from './functions/run-command/index.js';
 
 export enum ApiFunctions {
   GetAdvancedGameSettings = 'getadvancedgamesettings',
@@ -35,6 +39,7 @@ export enum ApiFunctions {
   HealthCheck = 'healthcheck',
   PasswordLogin = 'passwordlogin',
   QueryServerState = 'queryserverstate',
+  RunCommand = 'runcommand',
 }
 
 export type SatisfactoryServerOptions = {
@@ -47,6 +52,7 @@ export type ValidRequest = {
   healthcheck: HealthCheck;
   passwordlogin: PasswordLogin;
   queryserverstate: QueryServerState;
+  runcommand: RunCommand;
 };
 
 class SatisfactoryServer {
@@ -95,6 +101,9 @@ class SatisfactoryServer {
   async execute(
     apiFunction: 'queryserverstate',
   ): Promise<{ data: QueryServerStateResponseBody }>;
+  async execute(
+    apiFunction: 'runcommand',
+  ): Promise<{ data: RunCommandRequestResponseBody }>;
   async execute(
     apiFunction: keyof ValidRequest,
     data?: ValidRequest[typeof apiFunction]['requestType'] | null,

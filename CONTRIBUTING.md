@@ -53,7 +53,7 @@ To test:
   - [ ] SetClientPassword
   - [ ] SetAdminPassword
   - [ ] SetAutoLoadSessionName
-  - [ ] RunCommand
+  - [x] RunCommand
   - [ ] Shutdown
   - [ ] ApplyServerOptions
   - [ ] CreateNewGame
