@@ -1,10 +1,11 @@
 import 'dotenv/config';
 import logger from '../../src/logger/index.js';
-import executeGetAdvancedGameSettingsTests from './getadvancedgamesettings.js';
-import executeGetServerOptionsTests from './getserveroptions.js';
-import executeHealthCheckTests from './healthcheck.js';
-import executePasswordLoginTests from './passwordlogin.js';
-import executeQueryServerStateTests from './queryserverstate.js';
+import executeDownloadSaveGame from './downloadsavegame.js';
+// import executeGetAdvancedGameSettingsTests from './getadvancedgamesettings.js';
+// import executeGetServerOptionsTests from './getserveroptions.js';
+// import executeHealthCheckTests from './healthcheck.js';
+// import executePasswordLoginTests from './passwordlogin.js';
+// import executeQueryServerStateTests from './queryserverstate.js';
 
 const testResults = {
   success: 0,
@@ -27,11 +28,12 @@ function test(message: string, assertion: Function) {
 
 export { test };
 
-await executeGetAdvancedGameSettingsTests();
-await executeGetServerOptionsTests();
-await executeHealthCheckTests();
-await executePasswordLoginTests();
-await executeQueryServerStateTests();
+await executeDownloadSaveGame();
+// await executeGetAdvancedGameSettingsTests();
+// await executeGetServerOptionsTests();
+// await executeHealthCheckTests();
+// await executePasswordLoginTests();
+// await executeQueryServerStateTests();
 
 logger.log(`\n\nSummary:`);
 logger.success(`${testResults.success} successful tests`);

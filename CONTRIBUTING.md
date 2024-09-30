@@ -63,7 +63,7 @@ To test:
   - [ ] EnumerateSessions
   - [ ] LoadGame
   - [ ] UploadSaveGame
-  - [ ] DownloadSaveGame
+  - [x] DownloadSaveGame
 - [ ] Set up Vitepress
   - [ ] Add examples for every function
   - [x] Add install and configuration steps

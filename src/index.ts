@@ -28,8 +28,14 @@ import type {
   GetServerOptionsRequestData,
   GetServerOptionsResponseBody,
 } from './functions/get-server-options/index.js';
+import type {
+  DownloadSaveGame,
+  DownloadSaveGameRequestData,
+  DownloadSaveGameResponseBody,
+} from './functions/download-save-game/index.js';
 
 export enum ApiFunctions {
+  DownloadSaveGame = 'downloadsavegame',
   GetAdvancedGameSettings = 'getadvancedgamesettings',
   GetServerOptions = 'getserveroptions',
   HealthCheck = 'healthcheck',
@@ -42,6 +48,7 @@ export type SatisfactoryServerOptions = {
 };
 
 export type ValidRequest = {
+  downloadsavegame: DownloadSaveGame;
   getadvancedgamesettings: GetAdvancedGameSettings;
   getserveroptions: GetServerOptions;
   healthcheck: HealthCheck;
@@ -76,6 +83,10 @@ class SatisfactoryServer {
     return null;
   }
 
+  async execute(
+    apiFunction: 'downloadsavegame',
+    data?: DownloadSaveGameRequestData,
+  ): Promise<{ data: DownloadSaveGameResponseBody }>;
   async execute(
     apiFunction: 'getadvancedgamesettings',
     data?: GetAdvancedGameSettingsRequestData,
