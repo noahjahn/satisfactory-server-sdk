@@ -42,7 +42,7 @@ To test:
 - [ ] Completly implement all functions from documentation
   - [x] HealthCheck
   - [ ] VerifyAuthenticationToken
-  - [ ] PasswordlessLogin
+  - [x] PasswordlessLogin
   - [x] PasswordLogin
   - [x] QueryServerState
   - [ ] GetServerOptions
