@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import {
-  PrivilegeLevels,
   type PasswordLoginResponseBody,
   type PasswordLoginResponseErrorData,
 } from '../../src/functions/password-login/index.js';
+import { PrivilegeLevels } from '../../src/index.js';
 import { HttpError } from '../../src/http-client.js';
 import type { ResponseBody } from '../../src/http-client.js';
 import SatisfactoryServer from '../../src/index.js';

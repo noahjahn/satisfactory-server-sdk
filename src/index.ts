@@ -15,6 +15,11 @@ import type {
   PasswordLoginRequestData,
   PasswordLoginResponseBody,
 } from './functions/password-login/index.js';
+import type {
+  PasswordlessLogin,
+  PasswordlessLoginRequestData,
+  PasswordlessLoginResponseBody,
+} from './functions/passwordless-login/index.js';
 import type { QueryServerState } from './functions/query-server-state/index.js';
 import { validateUrl } from './helpers/validate-url.js';
 import type { QueryServerStateResponseBody } from './functions/query-server-state/index.js';
@@ -29,11 +34,27 @@ import type {
   GetServerOptionsResponseBody,
 } from './functions/get-server-options/index.js';
 
+export enum PrivilegeLevels {
+  NotAuthenticated = 'notauthenticated',
+  Client = 'client',
+  Administrator = 'administrator',
+  InitialAdmin = 'initialadmin',
+  APIToken = 'apitoken',
+}
+
+export type ValidPrivilegeLevels =
+  | 'notauthenticated'
+  | 'client'
+  | 'administrator'
+  | 'initialadmin'
+  | 'apitoken';
+
 export enum ApiFunctions {
   GetAdvancedGameSettings = 'getadvancedgamesettings',
   GetServerOptions = 'getserveroptions',
   HealthCheck = 'healthcheck',
   PasswordLogin = 'passwordlogin',
+  PasswordlessLogin = 'passwordlesslogin',
   QueryServerState = 'queryserverstate',
 }
 
@@ -46,6 +67,7 @@ export type ValidRequest = {
   getserveroptions: GetServerOptions;
   healthcheck: HealthCheck;
   passwordlogin: PasswordLogin;
+  passwordlesslogin: PasswordlessLogin;
   queryserverstate: QueryServerState;
 };
 
@@ -93,6 +115,10 @@ class SatisfactoryServer {
     data?: PasswordLoginRequestData,
   ): Promise<{ data: PasswordLoginResponseBody }>;
   async execute(
+    apiFunction: 'passwordlesslogin',
+    data?: PasswordlessLoginRequestData,
+  ): Promise<{ data: PasswordlessLoginResponseBody }>;
+  async execute(
     apiFunction: 'queryserverstate',
   ): Promise<{ data: QueryServerStateResponseBody }>;
   async execute(
@@ -126,7 +152,11 @@ class SatisfactoryServer {
       ValidRequest[typeof apiFunction]['responseType']
     >(requestOptions);
 
-    if (apiFunction === ApiFunctions.PasswordLogin) {
+    if (
+      apiFunction === ApiFunctions.PasswordLogin ||
+      apiFunction === ApiFunctions.PasswordlessLogin
+    ) {
+      // TODO: optionally ignore setting bearer token
       this.bearerToken = (
         (await responseBody) as ResponseBody<PasswordLoginResponseBody>
       ).data.authenticationToken;

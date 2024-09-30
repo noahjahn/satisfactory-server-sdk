@@ -1,17 +1,4 @@
-export enum PrivilegeLevels {
-  NotAuthenticated = 'notauthenticated',
-  Client = 'client',
-  Administrator = 'administrator',
-  InitialAdmin = 'initialadmin',
-  APIToken = 'apitoken',
-}
-
-export type ValidPrivilegeLevels =
-  | 'notauthenticated'
-  | 'client'
-  | 'administrator'
-  | 'initialadmin'
-  | 'apitoken';
+import type { ValidPrivilegeLevels } from '../../index.js';
 
 export type PasswordLoginRequestData = {
   minimumPrivilegeLevel: ValidPrivilegeLevels;

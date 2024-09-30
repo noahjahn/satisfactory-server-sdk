@@ -5,6 +5,7 @@ import executeGetServerOptionsTests from './getserveroptions.js';
 import executeHealthCheckTests from './healthcheck.js';
 import executePasswordLoginTests from './passwordlogin.js';
 import executeQueryServerStateTests from './queryserverstate.js';
+import executePasswordlessloginTests from './passwordlesslogin.js';
 
 const testResults = {
   success: 0,
@@ -26,6 +27,7 @@ function test(message: string, assertion: Function) {
 }
 
 export { test };
+await executePasswordlessloginTests();
 
 await executeGetAdvancedGameSettingsTests();
 await executeGetServerOptionsTests();
